@@ -8,9 +8,22 @@ const google = {
   apiKey: process.env.GOOGLE_API_KEY
 };
 
+const addabba = {
+  email: process.env.ADDABBA_EMAIL,
+  apiUrl: process.env.API_URL,
+  feUrl: process.env.FEURL
+};
+
+const sendgrid = {
+  username: process.env.SENDGRID_USERNAME,
+  password: process.env.SENDGRID_PASSWORD
+};
+
 module.exports = {
+  addabba,
   google,
   host,
   jwtSecret,
-  port
+  port,
+  sendgrid
 };

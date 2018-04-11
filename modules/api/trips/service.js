@@ -13,6 +13,11 @@ class TripsService {
     return Trip.findById(id);
   }
 
+  fetchTripByQuery(query) {
+    const { Trip } = this.req.models;
+    return Trip.findOne(query);
+  }
+
   createTrip(data) {
     const { Trip } = this.req.models;
     return Trip.create(data);
@@ -20,16 +25,7 @@ class TripsService {
 
   findByIdAndUpdate(id, body) {
     const { Trip } = this.req.models;
-    const { phone, language } = body;
-    let updates = {};
-
-    if (phone) {
-      updates.phone = phone;
-    }
-    if (language) {
-      updates.language = language;
-    }
-    return Trip.findByIdAndUpdate(id, updates, { new: true });
+    return Trip.findByIdAndUpdate(id, body, { new: true });
   }
 
   deleteTripById(id) {

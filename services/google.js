@@ -27,11 +27,16 @@ class GoogleService {
   }
 
   normalizeUserResponse(raw) {
+    if (raw.locale !== 'en' && raw.locale !== 'ar') {
+      raw.locale = 'ar';
+    }
     return {
       googleId: raw.sub,
       fname: raw.given_name,
       lname: raw.family_name,
-      email: raw.email
+      email: raw.email,
+      picture: raw.picture,
+      locale: raw.locale
     };
   }
 }

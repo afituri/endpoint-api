@@ -1,5 +1,6 @@
 /* eslint-disable */
 process.env.NODE_ENV = 'test';
+process.env.API_URL = 'http://localhost:8888';
 
 const mongoose = require('mongoose');
 

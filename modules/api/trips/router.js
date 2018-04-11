@@ -6,6 +6,9 @@ module.exports = () => {
 
   router.route('/').post(controller.tripsCreate);
 
+  router.route('/:id/requests').post(controller.servicesRequest);
+  router.route('/:id/requests/:requestId').put(controller.servicesUpdate);
+
   router
     .route('/:id')
     .get(controller.tripsShow)

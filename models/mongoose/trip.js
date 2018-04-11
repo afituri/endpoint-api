@@ -19,11 +19,11 @@ const TripSchema = mongoose.Schema(
     passengerPrice: { type: Number, default: 0 },
     vehicleDescription: { type: String, default: '' },
     notes: { type: String },
-    requests: [Request],
+    requests: { type: [Request], default: [] },
     autoAccept: { type: Boolean, default: false },
     status: {
       type: String,
-      enum: ['open', 'active', 'completed', 'expired'],
+      enum: ['open', 'active', 'canceled', 'completed', 'expired', 'blocked'],
       default: 'open',
       index: true
     }

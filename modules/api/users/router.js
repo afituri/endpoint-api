@@ -6,6 +6,8 @@ module.exports = () => {
 
   router.route('/').post(controller.usersCreate);
 
+  router.route('/login').post(controller.loginUser);
+
   router.route('/me').get(controller.me);
 
   router
