@@ -35,7 +35,7 @@ class UsersAPIController {
       })
       .catch(e => {
         console.log(`\nError at GET /users/${id}`, e);
-        return res.status(400).json({ error: e });
+        return res.status(400).json({ error: e, code: 'unknownError' });
       });
   }
 
@@ -47,7 +47,9 @@ class UsersAPIController {
     const validatedUser = service.validateUserRegistrationReq(req.body);
 
     if (validatedUser.error) {
-      return res.status(validatedUser.status).json({ error: validatedUser.error });
+      return res
+        .status(validatedUser.status)
+        .json({ error: validatedUser.error, code: validatedUser.code });
     }
 
     const create = data => {
@@ -60,7 +62,9 @@ class UsersAPIController {
           return res.status(201).send(Auth.createToken(user));
         })
         .catch(e => {
-          return res.status(401).json({ error: `Error persisting user: ${e}` });
+          return res
+            .status(401)
+            .json({ error: `Error persisting user: ${e}`, code: 'unknownError' });
         });
     };
 
@@ -81,7 +85,7 @@ class UsersAPIController {
         })
         .catch(e => {
           console.log('\nError at POST /api/v1/users', e);
-          res.status(400).json({ error: e });
+          res.status(400).json({ error: e, code: 'unknownError' });
         });
     } else if (googleToken) {
       return GoogleService.getUser(googleToken)
@@ -90,7 +94,7 @@ class UsersAPIController {
         })
         .catch(e => {
           console.log('\nError at POST /api/v1/users', e);
-          res.status(400).json({ error: e });
+          res.status(400).json({ error: e, code: 'unknownError' });
         });
     }
     return create({
@@ -109,7 +113,7 @@ class UsersAPIController {
 
     updateUser.then(user => res.status(200).json({ user })).catch(e => {
       console.log(`Error at PUT /users/${id}`, e);
-      res.status(400).json({ error: e });
+      res.status(400).json({ error: e, code: 'unknownError' });
     });
   }
 
@@ -121,7 +125,7 @@ class UsersAPIController {
 
     deleteUser.then(() => res.status(200).json({ id })).catch(e => {
       console.log(`Error at Delete /users/${id}`, e);
-      return res.status(400).json({ error: e });
+      return res.status(400).json({ error: e, code: 'unknownError' });
     });
   }
 
@@ -130,11 +134,16 @@ class UsersAPIController {
     const service = new Service(req);
 
     if (!email || !password) {
-      return res.status(400).json({ error: 'You must send the email and the password.' });
+      return res
+        .status(400)
+        .json({
+          error: 'You must send the email and the password.',
+          code: 'missingEmailOrPassword'
+        });
     }
     return service.logIn(email, password).then(result => {
       if (result.error) {
-        return res.status(result.status).json({ error: result.error });
+        return res.status(result.status).json({ error: result.error, code: result.code });
       }
       return res.status(200).send(Auth.createToken(result));
     });

@@ -12,7 +12,9 @@ class PassresetVerification {
         return res.status(201).send();
       })
       .catch(() => {
-        return res.status(401).json({ error: 'Could not find user with provided email' });
+        return res
+          .status(404)
+          .json({ error: 'Could not find user with provided email', code: 'emailNotFound' });
       });
   }
 
@@ -20,11 +22,13 @@ class PassresetVerification {
     const service = new Service(req);
     const { hash } = req.query;
     if (!hash) {
-      return res.status(401).json({ error: 'Hash not provided.' });
+      return res.status(401).json({ error: 'Hash not provided.', code: 'missingHash' });
     }
     let userData = await service.fetchVerificationHash(hash);
     if (!userData) {
-      return res.status(401).json({ error: 'Hash could not be located, or expired' });
+      return res
+        .status(401)
+        .json({ error: 'Hash could not be located, or expired', code: 'hashNotFound' });
     }
     return res.status(201).send(`${feUrl}/reset/${userData.verificationHash}`);
   }
@@ -33,7 +37,7 @@ class PassresetVerification {
     const { User, VerificationHash } = req.models;
     const { password, hash, email } = req.body;
     if (!hash || !password || !email) {
-      return res.status(401).json({ error: 'Information missing' });
+      return res.status(401).json({ error: 'Information missing', code: 'missingInformation' });
     }
     return VerificationHash.findOneAndRemove({ verificationHash: hash })
       .then(() => {
@@ -48,7 +52,8 @@ class PassresetVerification {
       })
       .catch(() => {
         return res.status(401).json({
-          error: 'Password could not be updated. Incorrect information.'
+          error: 'Password could not be updated. Incorrect information.',
+          code: 'passwordNotUpdaated'
         });
       });
   }

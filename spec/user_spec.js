@@ -532,7 +532,7 @@ describe('User', () => {
         },
         (err, res, body) => {
           body = JSON.parse(body);
-          expect(res.statusCode).toBe(401);
+          expect(res.statusCode).toBe(404);
           expect(body.error).toBeDefined();
           done();
         }
