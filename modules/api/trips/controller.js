@@ -107,6 +107,7 @@ class TripsAPIController {
 
   async servicesRequest(req, res) {
     const tripService = new Service(req);
+    const { Request } = req.models;
     const { id } = req.params;
     const {
       service,
@@ -137,7 +138,7 @@ class TripsAPIController {
         .json({ error: 'Owners are not allowed to request services for their trips' });
     }
 
-    targetedTrip.requests.push({
+    let request = new Request({
       customer,
       service,
       numberOfBags,
@@ -147,6 +148,9 @@ class TripsAPIController {
       endPointPhone,
       notes
     });
+    await request.save();
+
+    targetedTrip.requests.push(request);
     const updateTrip = tripService.findByIdAndUpdate(id, targetedTrip);
     return updateTrip.then(trip => res.status(201).json({ trip })).catch(e => {
       console.log(`Error at POST /trips/${id}/requests`, e);
@@ -167,17 +171,15 @@ class TripsAPIController {
     if (targetedTrip.status !== 'open') {
       return res.status(400).json({ error: 'Updating a service is not available for this trip' });
     }
-    if (owner !== targetedTrip.owner) {
-      console.log(owner, targetedTrip.owner);
+    if (owner.toString() !== targetedTrip.owner.toString()) {
       return res.status(400).json({ error: 'Only the owner of this trip is allowed to update' });
     }
-
-    if (action !== 'reject' || action !== 'accept') {
+    if (action !== 'reject' && action !== 'accept') {
       return res.status(400).json({ error: 'Invalid action' });
     }
 
-    const updateTrip = tripService.findByIdAndUpdate(requestId, { status: action });
-    return updateTrip.then(request => res.status(201).json({ request })).catch(e => {
+    const updateTrip = tripService.updateServiceStatus(requestId, action);
+    return updateTrip.then(request => res.status(200).json({ request })).catch(e => {
       console.log(`Error at PUT /trips/${id}/requests/${requestId}`, e);
       res.status(400).json({ error: e });
     });

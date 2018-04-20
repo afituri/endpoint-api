@@ -20,7 +20,9 @@ module.exports = {
     fname: 'Erlich2',
     lname: 'Buckman2',
     email: 'erlich2@buckman.com',
-    facebookId: '222222222'
+    password: '11111111',
+    locale: 'en',
+    status: 'active'
   },
   trip: {
     startPoint: {

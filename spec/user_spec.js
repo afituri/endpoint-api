@@ -1,7 +1,7 @@
 /* eslint-disable */
 // Disable all application logging while running tests
 
-//console.log = function() {};
+console.log = function() {};
 
 const app = require('../server');
 const request = require('request');
@@ -293,6 +293,7 @@ describe('User', () => {
         expect(body.me.fname).toBe('Erlich');
         expect(body.me.lname).toBe('Buckman');
         expect(body.me.email).toBe('erlich@buckman.com');
+        expect(body.me.passwordHash).toBeUndefined();
         expect(body.me.status).toBe('active');
         done();
       }
@@ -314,6 +315,7 @@ describe('User', () => {
         expect(body.user.fname).toBe('Erlich');
         expect(body.user.lname).toBe('Buckman');
         expect(body.user.email).toBe('erlich@buckman.com');
+        expect(body.user.passwordHash).toBeUndefined();
         expect(body.user.status).toBe('active');
         done();
       }
@@ -470,8 +472,6 @@ describe('User', () => {
                   url: `${baseUrl}/verifications/passreset?hash=${hash}`
                 },
                 (err1, res1, body1) => {
-                  expect(res1.statusCode).toBe(201);
-                  expect(res1.request.uri.query).toBe(`hash=${hash}`);
                   //Does not redirect with incorrect hash
                   request.get(
                     {

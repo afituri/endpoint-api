@@ -30,7 +30,7 @@ class PassresetVerification {
         .status(401)
         .json({ error: 'Hash could not be located, or expired', code: 'hashNotFound' });
     }
-    return res.status(201).send(`${feUrl}/reset/${userData.verificationHash}`);
+    return res.redirect(`${feUrl}/reset/${userData.verificationHash}`);
   }
 
   putPassresetVerification(req, res) {

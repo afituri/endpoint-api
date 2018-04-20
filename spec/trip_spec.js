@@ -36,15 +36,41 @@
 
 //   beforeEach(done => {
 //     user = new User(helpers.user);
-//     user.save().then(() => {
-//       body = createToken(user);
-//       token = body.id_token;
-//       done();
-//     });
+//     user
+//       .save()
+//       .then(() => {
+//         user2 = new User(helpers.user2);
+//         user2.save();
+//       })
+//       .then(() => {
+//         trip = new Trip(helpers.trip);
+//         trip.owner = user._id;
+//         trip.save();
+//       })
+//       .then(() => {
+//         req = new Request(helpers.request);
+//         req.customer = user2.customer;
+//         req.save();
+//       })
+//       .then(() => {
+//         request.post(
+//           {
+//             url: `${apiUrl}/users/login`,
+//             form: {
+//               email: helpers.user.email,
+//               password: helpers.user.password
+//             }
+//           },
+//           (err, res, body) => {
+//             body = JSON.parse(body);
+//             token = body.id_token;
+//             done();
+//           }
+//         );
+//       });
 //   });
 
 //   it('creats a new trip', done => {
-//     console.log(token);
 //     request.post(
 //       {
 //         url: `${apiUrl}/trips`,
@@ -82,7 +108,6 @@
 //         }
 //       },
 //       (err, res, body) => {
-//         console.log(body);
 //         body = JSON.parse(body);
 //         expect(res.statusCode).toBe(201);
 //         expect(body.trip.travelBy).toBe('air');
@@ -111,56 +136,57 @@
 //     );
 //   });
 
-//   // it('creats a new request', done => {
-//   //   logIn(facebookToken2, apiUrl, result => {
-//   //     request.post(
-//   //       {
-//   //         url: `${apiUrl}/trips/${trip._id}/requests`,
-//   //         headers: {
-//   //           Authorization: `JWT ${result.token}`
-//   //         },
-//   //         form: {
-//   //           service: 'package',
-//   //           weight: 2,
-//   //           phone: '09250887665',
-//   //           endPointPhone: '09755443333',
-//   //           notes: 'some package'
-//   //         }
-//   //       },
-//   //       (err, res, body) => {
-//   //         body = JSON.parse(body);
-//   //         expect(res.statusCode).toBe(201);
-//   //         expect(body.trip.requests[0].service).toBe('package');
-//   //         expect(body.trip.requests[0].weight).toBe(2);
-//   //         expect(body.trip.requests[0].phone).toBe('09250887665');
-//   //         expect(body.trip.requests[0].endPointPhone).toBe('09755443333');
-//   //         expect(body.trip.requests[0].status).toBe('pending');
-//   //         expect(body.trip.requests[0].notes).toBe('some package');
-//   //         expect(body.trip.owner).toBe(user._id.toString());
-//   //         done();
-//   //       }
-//   //     );
-//   //   });
-//   // });
+//   it('creats a new request', done => {
+//     logIn(facebookToken2, apiUrl, result => {
+//       request.post(
+//         {
+//           url: `${apiUrl}/trips/${trip._id}/requests`,
+//           headers: {
+//             Authorization: `JWT ${result.token}`
+//           },
+//           form: {
+//             service: 'package',
+//             weight: 2,
+//             phone: '09250887665',
+//             endPointPhone: '09755443333',
+//             notes: 'some package'
+//           }
+//         },
+//         (err, res, body) => {
+//           body = JSON.parse(body);
+//           console.log(body.trip.requests);
+//           expect(res.statusCode).toBe(201);
+//           expect(body.trip.requests[0].service).toBe('package');
+//           expect(body.trip.requests[0].weight).toBe(2);
+//           expect(body.trip.requests[0].phone).toBe('09250887665');
+//           expect(body.trip.requests[0].endPointPhone).toBe('09755443333');
+//           expect(body.trip.requests[0].status).toBe('pending');
+//           expect(body.trip.requests[0].notes).toBe('some package');
+//           expect(body.trip.owner).toBe(user._id.toString());
+//           done();
+//         }
+//       );
+//     });
+//   });
 
-//   // it('Accepts a request', done => {
-//   //   request.put(
-//   //     {
-//   //       url: `${apiUrl}/trips/${trip._id}/requests/${req._id}`,
-//   //       headers: {
-//   //         Authorization: `JWT ${token}`
-//   //       },
-//   //       form: {
-//   //         action: 'accept'
-//   //       }
-//   //     },
-//   //     (err, res, body) => {
-//   //       body = JSON.parse(body);
-//   //       console.log(body);
-//   //       done();
-//   //     }
-//   //   );
-//   // });
+//   it('Accepts a request', done => {
+//     request.put(
+//       {
+//         url: `${apiUrl}/trips/${trip._id}/requests/${req._id}`,
+//         headers: {
+//           Authorization: `JWT ${token}`
+//         },
+//         form: {
+//           action: 'accept'
+//         }
+//       },
+//       (err, res, body) => {
+//         body = JSON.parse(body);
+//         console.log(body);
+//         done();
+//       }
+//     );
+//   });
 // });
 
 // // ----------------------------------------

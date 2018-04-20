@@ -7,7 +7,10 @@ const GoogleService = require('../../../services/google');
 
 class UsersAPIController {
   me(req, res) {
-    return res.json({ me: req.user });
+    let { user } = req;
+    user = user.toObject();
+    delete user.passwordHash;
+    return res.json({ me: user });
   }
 
   usersIndex(req, res) {
@@ -31,6 +34,8 @@ class UsersAPIController {
     service
       .fetchUserById(id)
       .then(user => {
+        user = user.toObject();
+        delete user.passwordHash;
         return res.json({ user });
       })
       .catch(e => {
@@ -134,12 +139,10 @@ class UsersAPIController {
     const service = new Service(req);
 
     if (!email || !password) {
-      return res
-        .status(400)
-        .json({
-          error: 'You must send the email and the password.',
-          code: 'missingEmailOrPassword'
-        });
+      return res.status(400).json({
+        error: 'You must send the email and the password.',
+        code: 'missingEmailOrPassword'
+      });
     }
     return service.logIn(email, password).then(result => {
       if (result.error) {

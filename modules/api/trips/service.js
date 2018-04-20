@@ -28,6 +28,15 @@ class TripsService {
     return Trip.findByIdAndUpdate(id, body, { new: true });
   }
 
+  updateServiceStatus(requestId, action) {
+    const { Trip } = this.req.models;
+    return Trip.update(
+      { 'requests._id': requestId.toString() },
+      { $set: { 'requests.$.status': action } },
+      { new: true }
+    );
+  }
+
   deleteTripById(id) {
     const { Trip } = this.req.models;
     return Trip.remove({ _id: id });
