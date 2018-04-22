@@ -485,7 +485,6 @@ describe('User', () => {
                           method: 'PUT',
                           url: `${baseUrl}/verifications/passreset`,
                           form: {
-                            email: 'erlich@buckman.com',
                             password: 'lattitude',
                             hash: hash
                           }

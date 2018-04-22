@@ -33,29 +33,27 @@ class PassresetVerification {
     return res.redirect(`${feUrl}reset/${userData.verificationHash}`);
   }
 
-  putPassresetVerification(req, res) {
+  async putPassresetVerification(req, res) {
     const { User, VerificationHash } = req.models;
-    const { password, hash, email } = req.body;
-    if (!hash || !password || !email) {
+    const { password, hash } = req.body;
+    if (!hash || !password) {
       return res.status(401).json({ error: 'Information missing', code: 'missingInformation' });
     }
-    return VerificationHash.findOneAndRemove({ verificationHash: hash })
-      .then(() => {
-        return User.findOne({ email });
-      })
-      .then(userData => {
-        userData.password = password;
-        return userData.save();
-      })
-      .then(() => {
-        return res.status(201).send();
-      })
-      .catch(() => {
-        return res.status(401).json({
-          error: 'Password could not be updated. Incorrect information.',
-          code: 'passwordNotUpdaated'
-        });
+    let vh;
+    let userData;
+    try {
+      vh = await VerificationHash.findOne({ verificationHash: hash });
+      await VerificationHash.findOneAndRemove({ _id: vh._id });
+      userData = await User.findOne({ _id: vh.user });
+      userData.password = password;
+      await userData.save();
+    } catch (err) {
+      return res.status(401).json({
+        error: 'Password could not be updated. Incorrect information.',
+        code: 'passwordNotUpdaated'
       });
+    }
+    return res.status(201).send();
   }
 }
 
