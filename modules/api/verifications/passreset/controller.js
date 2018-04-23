@@ -24,13 +24,13 @@ class PassresetVerification {
     if (!hash) {
       return res.status(401).json({ error: 'Hash not provided.', code: 'missingHash' });
     }
-    let userData = await service.fetchVerificationHash(hash);
-    if (!userData) {
+    let user = await service.fetchVerificationHash(hash);
+    if (!user) {
       return res
         .status(401)
         .json({ error: 'Hash could not be located, or expired', code: 'hashNotFound' });
     }
-    return res.redirect(`${feUrl}reset?hash=${userData.verificationHash}`);
+    return res.redirect(`${feUrl}reset?hash=${user.verificationHash}`);
   }
 
   async putPassresetVerification(req, res) {
@@ -40,13 +40,16 @@ class PassresetVerification {
       return res.status(401).json({ error: 'Information missing', code: 'missingInformation' });
     }
     let vh;
-    let userData;
+    let user;
     try {
       vh = await VerificationHash.findOne({ verificationHash: hash });
       await VerificationHash.findOneAndRemove({ _id: vh._id });
-      userData = await User.findOne({ _id: vh.user });
-      userData.password = password;
-      await userData.save();
+      user = await User.findOne({ _id: vh.user });
+      user.password = password;
+      if (user.status === 'inactive') {
+        user.status = 'active';
+      }
+      await user.save();
     } catch (err) {
       return res.status(401).json({
         error: 'Password could not be updated. Incorrect information.',
