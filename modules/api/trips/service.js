@@ -5,7 +5,13 @@ class TripsService {
 
   fetchTrips() {
     const { Trip } = this.req.models;
-    return Trip.find();
+    return Trip.find({ status: 'open' }).populate('owner', [
+      'fname',
+      'lname',
+      'reviews',
+      '_id',
+      'picture'
+    ]);
   }
 
   fetchTripById(id) {
@@ -30,9 +36,11 @@ class TripsService {
 
   updateServiceStatus(requestId, action) {
     const { Trip } = this.req.models;
+    let status = action === 'accept' ? 'accepted' : 'rejected';
+
     return Trip.update(
       { 'requests._id': requestId.toString() },
-      { $set: { 'requests.$.status': action } },
+      { $set: { 'requests.$.status': status } },
       { new: true }
     );
   }

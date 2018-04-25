@@ -13,6 +13,7 @@ module.exports = {
     lname: 'Buckman',
     email: 'erlich@buckman.com',
     password: '11111111',
+    picture: '/somephoto',
     locale: 'en',
     status: 'active'
   },
@@ -56,9 +57,9 @@ module.exports = {
         stateAr: 'نيويورك',
         formattedAddress: 'New York, US',
         formattedAddressAr: 'نيويورك, الولايات المتحدة',
-        placeId: 'ChIJfVMfhFSIfg0RDyn3Yjf2h0E'
+        placeId: 'ChIJOwg_06VPwokRYv534QaPC8g'
       },
-      meetingPoint: 'some start meeting point',
+      meetingPoint: 'some end meeting point',
       meetingTime: moment()
         .add(6, 'days')
         .toJSON(),
