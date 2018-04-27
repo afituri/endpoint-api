@@ -53,7 +53,7 @@ class PassresetVerification {
     } catch (err) {
       return res.status(401).json({
         error: 'Password could not be updated. Incorrect information.',
-        code: 'passwordNotUpdaated'
+        code: 'passwordNotUpdated'
       });
     }
     return res.status(201).send();
