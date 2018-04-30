@@ -23,18 +23,35 @@ class UsersService {
     return User.findByIdAndUpdate(id, { status: 'active' }, { new: true });
   }
 
-  findByIdAndUpdate(id, body) {
+  async findByIdAndUpdate(id, body) {
     const { User } = this.req.models;
-    const { phone, language } = body;
-    let updates = {};
+    const {
+      fname, lname, locale, phone, password, picture
+    } = body;
+    let user = await User.findById(id);
 
+    if (fname) {
+      user.fname = fname;
+    }
+    if (lname) {
+      user.lname = lname;
+    }
+    if (picture) {
+      user.picture = picture;
+    }
+    if (password) {
+      if (this.validatePassword(password).error) {
+        return this.validatePassword(password);
+      }
+      user.password = password;
+    }
     if (phone) {
-      updates.phone = phone;
+      user.phone = phone;
     }
-    if (language) {
-      updates.language = language;
+    if (locale) {
+      user.language = locale;
     }
-    return User.findByIdAndUpdate(id, updates, { new: true });
+    return user.save();
   }
 
   deleteUserById(id) {

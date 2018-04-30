@@ -8,6 +8,14 @@ const google = {
   apiKey: process.env.GOOGLE_API_KEY
 };
 
+const aws = {
+  s3Bucket: process.env.S3_BUCKET || 'addabba',
+  awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  s3Url: process.env.S3_URL || 'https://s3-us-west-1.amazonaws.com',
+  s3Region: process.env.S3_REGION || 'us-west-1'
+};
+
 const addabba = {
   email: process.env.ADDABBA_EMAIL,
   apiUrl: process.env.API_URL,
@@ -21,6 +29,7 @@ const sendgrid = {
 
 module.exports = {
   addabba,
+  aws,
   google,
   host,
   jwtSecret,

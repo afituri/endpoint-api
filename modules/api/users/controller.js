@@ -116,10 +116,16 @@ class UsersAPIController {
     const { id } = req.params;
     const updateUser = service.findByIdAndUpdate(id, req.body);
 
-    updateUser.then(user => res.status(200).json({ user })).catch(e => {
-      console.log(`Error at PUT /users/${id}`, e);
-      res.status(400).json({ error: e, code: 'unknownError' });
-    });
+    updateUser
+      .then(user => {
+        user = user.toObject();
+        delete user.passwordHash;
+        res.status(200).json({ user });
+      })
+      .catch(e => {
+        console.log(`Error at PUT /users/${id}`, e);
+        res.status(400).json({ error: e, code: 'unknownError' });
+      });
   }
 
   usersDelete(req, res) {

@@ -331,15 +331,39 @@ describe('User', () => {
           Authorization: `JWT ${token}`
         },
         form: {
+          fname: 'Mark',
+          lname: 'Stephen',
           phone: '0925032654',
+          picture: 'https://somepic.com/mypic.jpg',
+          password: 'myNewPassword',
           locale: 'en'
         }
       },
       (err, res, body) => {
         body = JSON.parse(body);
+        expect(body.user.fname).toBe('Mark');
+        expect(body.user.lname).toBe('Stephen');
+        expect(body.user.picture).toBe('https://somepic.com/mypic.jpg');
         expect(body.user.locale).toBe('en');
         expect(body.user.phone).toBe('0925032654');
-        done();
+        expect(body.user.passwordHash).toBeUndefined();
+
+        //Can login with new password
+        request.post(
+          {
+            url: `${apiUrl}/users/login`,
+            form: {
+              email: 'erlich@buckman.com',
+              password: 'myNewPassword'
+            }
+          },
+          (err, res, body) => {
+            body = JSON.parse(body);
+            expect(res.statusCode).toBe(200);
+            expect(body.error).toBe(undefined);
+            done();
+          }
+        );
       }
     );
   });
