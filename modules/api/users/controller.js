@@ -1,4 +1,5 @@
 const Service = require('./service');
+const mongoose = require('mongoose');
 
 const Auth = require('../../../services/auth');
 const EmailService = require('../../../services/emailVerification');
@@ -156,6 +157,23 @@ class UsersAPIController {
       }
       return res.status(200).send(Auth.createToken(result));
     });
+  }
+
+  async fetchUserTrips(req, res) {
+    const service = new Service(req);
+    const { id } = req.params;
+    let trips;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid ID', code: 'invalidId' });
+    }
+
+    try {
+      trips = await service.fetchUserTrips(id);
+      return res.status(200).json({ trips });
+    } catch (err) {
+      return res.status(400).json({ error: err, code: 'unknownError' });
+    }
   }
 }
 

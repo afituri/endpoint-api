@@ -1,0 +1,8 @@
+{
+  "subject-ar": "قم بتفعيل حساب الدابة الخاص بك.",
+  "subject-en": "Confirm your Addabba account!",
+  "html-ar":
+    "<p dir=\"rtl\">قم بالضغط على <a href=\"{url}/verifications/email?hash={hash}\">الرابط</a> لتفعيل حسابك.</p><p dir=\"rtl\">سوف تبطل صلاحية هذا الرابط خلال 20 دقيقة</p>",
+  "html-en":
+    "<p>Click this <a href=\"{url}/verifications/email?hash={hash}\">link</a> to confirm your account.</p><p>This link will expire in 20 minutes after registration.</p>"
+}

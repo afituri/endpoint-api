@@ -74,6 +74,44 @@ describe('Trip', () => {
       });
   });
 
+  it('shows user trips', done => {
+    request.get(
+      {
+        url: `${apiUrl}/users/${user._id}/trips`,
+        headers: {
+          Authorization: `JWT ${token}`
+        }
+      },
+      (err, res, body) => {
+        body = JSON.parse(body);
+        expect(res.statusCode).toBe(200);
+        expect(body.trips[0].travelBy).toBe('air');
+        expect(body.trips[0].service).toBe('package');
+        expect(body.trips[0].startPoint.location.placeId).toBe('ChIJfVMfhFSIfg0RDyn3Yjf2h0E');
+        expect(body.trips[0].startPoint.meetingPoint).toBe('some start meeting point');
+        expect(body.trips[0].startPoint.phone).toBe('092874737282');
+        expect(body.trips[0].startPoint.location.country).toBe('Algeria');
+        expect(body.trips[0].startPoint.location.city).toBe('Oran');
+        expect(body.trips[0].startPoint.location.state).toBe('Oran Province');
+        expect(body.trips[0].startPoint.location.countryAr).toBe('الجزائر');
+        expect(body.trips[0].startPoint.location.cityAr).toBe('وهران');
+        expect(body.trips[0].startPoint.location.stateAr).toBe('ولاية وهران');
+        expect(body.trips[0].endPoint.location.placeId).toBe('ChIJOwg_06VPwokRYv534QaPC8g');
+        expect(body.trips[0].endPoint.meetingPoint).toBe('some end meeting point');
+        expect(body.trips[0].endPoint.phone).toBe('092874737281');
+        expect(body.trips[0].endPoint.location.country).toBe('United States');
+        expect(body.trips[0].endPoint.location.city).toBe('New York');
+        expect(body.trips[0].endPoint.location.state).toBe('New York');
+        expect(body.trips[0].endPoint.location.countryAr).toBe('الولايات المتحدة');
+        expect(body.trips[0].endPoint.location.cityAr).toBe('نيويورك');
+        expect(body.trips[0].endPoint.location.stateAr).toBe('نيويورك');
+        expect(body.trips[0].travelType).toBe('international');
+        expect(body.trips[0].status).toBe('open');
+        done();
+      }
+    );
+  });
+
   it('gets all trips', done => {
     request.get(
       {

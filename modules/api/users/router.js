@@ -15,5 +15,7 @@ module.exports = () => {
     .get(controller.usersShow)
     .put(controller.usersUpdate);
 
+  router.route('/:id/trips').get(controller.fetchUserTrips);
+
   return router;
 };

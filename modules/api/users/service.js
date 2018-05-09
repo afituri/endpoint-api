@@ -120,6 +120,11 @@ class UsersService {
     }
     return true;
   }
+
+  fetchUserTrips(id) {
+    const { Trip } = this.req.models;
+    return Trip.find({ owner: id });
+  }
 }
 
 module.exports = UsersService;
